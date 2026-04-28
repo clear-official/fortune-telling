@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>四柱推命の日｜杏月先生の無料鑑定</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="lantern lantern-left">🏮</div>
+  <div class="header-inner">
+    <div class="diamonds-row">
+      <span class="diamond">四</span>
+      <span class="diamond">柱</span>
+      <span class="diamond">推</span>
+      <span class="diamond">命</span>
+      <span class="diamond">の</span>
+      <span class="diamond">日</span>
+    </div>
+    <div class="subtitle-badge">杏月先生 総括</div>
+    <h1 class="header-catch">あなたと相手の<span class="gold">相性</span></h1>
+    <p class="header-sub">生年月日から読み解く、あなたの本質と運命</p>
+  </div>
+  <div class="lantern lantern-right">🏮</div>
+  <div class="stars-bg"></div>
+</header>
+
+<!-- ===== STEP FLOW ===== -->
+<main>
+  <!-- STEP 1: 入力フォーム -->
+  <section id="step-input" class="step active">
+    <div class="container">
+      <div class="step-label"><span>STEP 1</span> 生年月日を入力</div>
+      <div class="card form-card">
+        <div class="form-group">
+          <label>お名前（ニックネーム可）</label>
+          <input type="text" id="name" placeholder="例：山田 花子" maxlength="20" />
+        </div>
+        <div class="form-group">
+          <label>生年月日</label>
+          <div class="date-row">
+            <div class="select-wrap">
+              <select id="birth-year"></select>
+              <span class="unit">年</span>
+            </div>
+            <div class="select-wrap">
+              <select id="birth-month"></select>
+              <span class="unit">月</span>
+            </div>
+            <div class="select-wrap">
+              <select id="birth-day"></select>
+              <span class="unit">日</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>性別</label>
+          <div class="gender-row">
+            <button class="gender-btn active" data-gender="female">女性</button>
+            <button class="gender-btn" data-gender="male">男性</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>出生時刻（わかる場合）</label>
+          <div class="time-row">
+            <div class="select-wrap">
+              <select id="birth-hour">
+                <option value="-1">不明</option>
+              </select>
+              <span class="unit">時</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-primary" id="btn-diagnose">
+          <span class="btn-icon">✦</span> 無料で鑑定する <span class="btn-icon">✦</span>
+        </button>
+        <p class="note">※ 個人情報は収集・保存されません</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 2: 鑑定結果 -->
+  <section id="step-result" class="step">
+    <div class="container">
+      <div class="step-label"><span>STEP 2</span> 簡易鑑定結果</div>
+
+      <!-- 命式表 -->
+      <div class="result-block">
+        <div class="result-title">
+          <span class="icon-title">📜</span> 命式表
+        </div>
+        <div class="card">
+          <div class="meishiki-grid" id="meishiki-table">
+            <!-- JS挿入 -->
+          </div>
+          <div class="meishiki-legend">
+            <span>年柱</span><span>月柱</span><span>日柱</span><span>時柱</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 属性 -->
+      <div class="result-block">
+        <div class="result-title">
+          <span class="icon-title">🌊</span> あなたの属性
+        </div>
+        <div class="card attribute-card" id="attribute-card">
+          <!-- JS挿入 -->
+        </div>
+      </div>
+
+      <!-- 本質 -->
+      <div class="result-block">
+        <div class="result-title">
+          <span class="icon-title">⭐</span> あなたの本質
+        </div>
+        <div class="card essence-card" id="essence-card">
+          <!-- JS挿入 -->
+        </div>
+      </div>
+
+      <!-- 杏月先生への誘導 -->
+      <div class="cta-block">
+        <div class="cta-inner">
+          <div class="cta-badge">杏月先生による</div>
+          <h2 class="cta-title">本格鑑定で<br><span class="gold">あなたの未来</span>を<br>詳しく読み解きます</h2>
+          <ul class="cta-list">
+            <li>✦ 今後の運勢・転機の時期</li>
+            <li>✦ 恋愛・結婚の相性と運命</li>
+            <li>✦ 仕事・金運の流れ</li>
+            <li>✦ あなただけの開運アドバイス</li>
+          </ul>
+          <a href="#" class="btn-cta" id="btn-cta">
+            <span>杏月先生に本格鑑定を依頼する</span>
+            <span class="arrow">→</span>
+          </a>
+          <p class="cta-note">＊ 簡易鑑定の結果が自動で引き継がれます</p>
+        </div>
+      </div>
+
+      <button class="btn-back" id="btn-back">← もう一度診断する</button>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>© 2025 四柱推命の日｜杏月先生鑑定室</p>
+</footer>
+
+<script src="suimei.js"></script>
+</body>
+</html>
