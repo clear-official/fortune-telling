@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>四柱推命の日 ─ 命式鑑定</title>
+<title>四柱推命 ─ 命式鑑定</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -68,7 +68,7 @@ header{position:relative;z-index:2;overflow:hidden;}
 .hbg{
   position:relative;
   background:linear-gradient(170deg,#040716 0%,#08112e 35%,#140850 65%,#1a0840 100%);
-  padding:52px 16px 44px;text-align:center;
+  padding:56px 16px 44px;text-align:center;
   overflow:hidden;
 }
 /* ヘッダー内の雲エフェクト */
@@ -95,7 +95,7 @@ header{position:relative;z-index:2;overflow:hidden;}
 }
 .ln:nth-child(2){animation-delay:1.1s;}.ln:nth-child(3){animation-delay:2s;}
 @keyframes lsway{0%,100%{transform:rotate(-5deg);}50%{transform:rotate(5deg);}}
-.ln-string{width:1px;height:18px;background:linear-gradient(to bottom,rgba(180,150,60,.6),rgba(180,150,60,.3));}
+.ln-string{width:1px;height:28px;background:linear-gradient(to bottom,rgba(180,150,60,.6),rgba(180,150,60,.3));}
 .ln-top{width:12px;height:5px;background:#c8a030;border-radius:3px 3px 0 0;}
 .ln-body{
   width:28px;height:42px;
@@ -111,7 +111,7 @@ header{position:relative;z-index:2;overflow:hidden;}
 .diamond-title{
   display:flex;justify-content:center;align-items:center;
   gap:4px;flex-wrap:wrap;
-  margin-bottom:18px;position:relative;z-index:2;
+  margin-top:20px;margin-bottom:22px;position:relative;z-index:2;
 }
 .d-tile{
   position:relative;width:66px;height:66px;
@@ -569,13 +569,9 @@ footer{
       <div class="d-tile"><span>推</span></div>
       <div class="d-sep"></div>
       <div class="d-tile"><span>命</span></div>
-      <div class="d-sep"></div>
-      <div class="d-tile"><span>の</span></div>
-      <div class="d-sep"></div>
-      <div class="d-tile"><span>日</span></div>
     </div>
 
-    <div class="sub-badge">命式鑑定　無料・本格</div>
+    <div class="sub-badge">命式鑑定</div>
     <p class="catch">あなたの<em>命式</em>と<em>本質</em>を読む</p>
   </div>
 
@@ -697,13 +693,13 @@ footer{
     </div>
 
     <div class="notice">
-      ※ 命式計算は立春節入り方式（各月の節気基準）を採用し、4chu.net・suimei-mobile.com 等複数サービスのアルゴリズムを参考に平均化した手法を採用しています。<br>
-      ※ 出生時刻が不明な場合、時柱は省略されます。より精密な鑑定には出生時刻の入力をお勧めします。
+      ※ 本結果は参考情報です。専門家による鑑定の代替ではありません。<br>
+      ※ 出生時刻が不明な場合、時柱は省略されます。
     </div>
   </div>
 </main>
 
-<footer>© 2025 四柱推命の日 ─ 命式鑑定　無料・本格</footer>
+<footer>© 2025 四柱推命 ─ 命式鑑定</footer>
 
 <script>
 /* ════════════════════════════════
@@ -731,12 +727,12 @@ footer{
    時刻ボタン生成
 ════════════════════════════════ */
 const JIKOKU=[
-  {l:'子',s:'23〜1時',h:23},{l:'丑',s:'1〜3時',h:1},
-  {l:'寅',s:'3〜5時',h:3},{l:'卯',s:'5〜7時',h:5},
-  {l:'辰',s:'7〜9時',h:7},{l:'巳',s:'9〜11時',h:9},
-  {l:'午',s:'11〜13時',h:11},{l:'未',s:'13〜15時',h:13},
-  {l:'申',s:'15〜17時',h:15},{l:'酉',s:'17〜19時',h:17},
-  {l:'戌',s:'19〜21時',h:19},{l:'亥',s:'21〜23時',h:21},
+  {l:'子',s:'23:00〜0:59',h:23},{l:'丑',s:'1:00〜2:59',h:1},
+  {l:'寅',s:'3:00〜4:59',h:3},{l:'卯',s:'5:00〜6:59',h:5},
+  {l:'辰',s:'7:00〜8:59',h:7},{l:'巳',s:'9:00〜10:59',h:9},
+  {l:'午',s:'11:00〜12:59',h:11},{l:'未',s:'13:00〜14:59',h:13},
+  {l:'申',s:'15:00〜16:59',h:15},{l:'酉',s:'17:00〜18:59',h:17},
+  {l:'戌',s:'19:00〜20:59',h:19},{l:'亥',s:'21:00〜22:59',h:21},
 ];
 (function(){
   const g=document.getElementById('hgrid');
