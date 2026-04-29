@@ -1,157 +1,1038 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>四柱推命の日｜杏月先生の無料鑑定</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>四柱推命の日 ─ 命式鑑定</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --night:#06081a;
+  --night2:#0b0e28;
+  --night3:#10163a;
+  --gold:#d4a844;--gold2:#f0c860;--gold3:#fffae8;
+  --red:#c02848;--red2:#e85570;--pink:#f0a0c0;
+  --teal:#30d8c0;--teal2:#70eedd;
+  --purple:#9060e0;--purple2:#c090ff;
+  --text:#eee8ff;--text2:rgba(238,232,255,.68);--text3:rgba(238,232,255,.38);
+  --border:rgba(212,168,68,.28);--borderl:rgba(212,168,68,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--night);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* ═══ 固定背景レイヤー ═══ */
+#bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+
+/* 星空 canvas */
+#stars{position:absolute;inset:0;}
+
+/* 流れる雲 */
+.cloud{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(28px);
+  opacity:0;
+  animation:cloud-drift linear infinite;
+}
+.cloud.c1{width:320px;height:90px;background:radial-gradient(ellipse,rgba(60,40,160,.45),transparent 70%);top:12%;animation-duration:38s;animation-delay:0s;}
+.cloud.c2{width:260px;height:70px;background:radial-gradient(ellipse,rgba(120,50,180,.35),transparent 70%);top:28%;animation-duration:52s;animation-delay:-14s;}
+.cloud.c3{width:400px;height:100px;background:radial-gradient(ellipse,rgba(40,30,140,.4),transparent 70%);top:55%;animation-duration:44s;animation-delay:-7s;}
+.cloud.c4{width:280px;height:80px;background:radial-gradient(ellipse,rgba(80,30,150,.3),transparent 70%);top:72%;animation-duration:60s;animation-delay:-22s;}
+.cloud.c5{width:200px;height:60px;background:radial-gradient(ellipse,rgba(160,80,200,.25),transparent 70%);top:40%;animation-duration:35s;animation-delay:-18s;}
+/* 明るい雲（画像の白みがかった雲） */
+.cloud.w1{width:350px;height:80px;background:radial-gradient(ellipse,rgba(180,170,255,.12),transparent 70%);top:8%;animation-duration:46s;animation-delay:-5s;filter:blur(22px);}
+.cloud.w2{width:280px;height:65px;background:radial-gradient(ellipse,rgba(200,180,255,.1),transparent 70%);top:35%;animation-duration:55s;animation-delay:-30s;filter:blur(20px);}
+.cloud.w3{width:420px;height:95px;background:radial-gradient(ellipse,rgba(160,150,240,.1),transparent 70%);top:62%;animation-duration:48s;animation-delay:-12s;filter:blur(25px);}
+
+@keyframes cloud-drift{
+  0%{opacity:0;transform:translateX(-120%);}
+  8%{opacity:1;}
+  92%{opacity:1;}
+  100%{opacity:0;transform:translateX(120vw);}
+}
+
+/* 底光 */
+.bg-glow{
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+}
+.bg-glow.g1{width:600px;height:300px;bottom:-80px;left:-100px;background:radial-gradient(ellipse,rgba(80,40,200,.18),transparent 70%);filter:blur(40px);}
+.bg-glow.g2{width:500px;height:250px;bottom:-60px;right:-80px;background:radial-gradient(ellipse,rgba(160,40,100,.14),transparent 70%);filter:blur(40px);}
+
+/* ═══ HEADER ═══ */
+header{position:relative;z-index:2;overflow:hidden;}
+.hbg{
+  position:relative;
+  background:linear-gradient(170deg,#040716 0%,#08112e 35%,#140850 65%,#1a0840 100%);
+  padding:52px 16px 44px;text-align:center;
+  overflow:hidden;
+}
+/* ヘッダー内の雲エフェクト */
+.hbg::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 15% 80%,rgba(80,40,200,.3) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 30%,rgba(180,40,100,.22) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 35% at 50% 110%,rgba(100,60,220,.18) 0%,transparent 55%);
+}
+/* ヘッダー雲SVG */
+.h-cloud{position:absolute;pointer-events:none;opacity:.18;}
+.h-cloud.hc1{bottom:-10px;left:-30px;width:380px;animation:hcloud 18s ease-in-out infinite;}
+.h-cloud.hc2{bottom:0px;right:-20px;width:320px;animation:hcloud 22s ease-in-out infinite reverse;animation-delay:-8s;}
+.h-cloud.hc3{top:10px;left:30%;width:260px;animation:hcloud 25s ease-in-out infinite;animation-delay:-12s;opacity:.1;}
+@keyframes hcloud{0%,100%{transform:translateX(0) translateY(0);}33%{transform:translateX(12px) translateY(-6px);}66%{transform:translateX(-8px) translateY(4px);}}
+
+/* 左右ランタン */
+.lantern-wrap{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:0 24px;pointer-events:none;z-index:3;}
+.ln{
+  display:flex;flex-direction:column;align-items:center;
+  transform-origin:top center;
+  animation:lsway 3.5s ease-in-out infinite;
+}
+.ln:nth-child(2){animation-delay:1.1s;}.ln:nth-child(3){animation-delay:2s;}
+@keyframes lsway{0%,100%{transform:rotate(-5deg);}50%{transform:rotate(5deg);}}
+.ln-string{width:1px;height:18px;background:linear-gradient(to bottom,rgba(180,150,60,.6),rgba(180,150,60,.3));}
+.ln-top{width:12px;height:5px;background:#c8a030;border-radius:3px 3px 0 0;}
+.ln-body{
+  width:28px;height:42px;
+  background:linear-gradient(160deg,#e85030,#c02010);
+  border-radius:5px 5px 7px 7px;
+  box-shadow:0 0 20px rgba(255,100,40,.65),0 0 40px rgba(255,80,20,.3),inset 0 0 8px rgba(255,200,50,.2);
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+.ln-body::after{content:'福';font-size:10px;color:rgba(255,220,100,.8);font-family:'Noto Serif JP',serif;}
+.ln-tail{width:2px;height:12px;background:linear-gradient(to bottom,rgba(180,150,60,.5),transparent);}
+
+/* 菱形タイトル */
+.diamond-title{
+  display:flex;justify-content:center;align-items:center;
+  gap:4px;flex-wrap:wrap;
+  margin-bottom:18px;position:relative;z-index:2;
+}
+.d-tile{
+  position:relative;width:66px;height:66px;
+  display:flex;align-items:center;justify-content:center;
+  filter:drop-shadow(0 0 8px rgba(210,50,70,.5));
+}
+.d-tile::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(145deg,#d84060,#a01030);
+  transform:rotate(45deg) scale(.84);
+  border:2px solid var(--gold);
+  box-shadow:inset 0 0 10px rgba(255,180,80,.15);
+}
+.d-tile span{
+  position:relative;z-index:1;
+  font-family:'Noto Serif JP',serif;
+  font-size:22px;font-weight:900;color:#fff;
+  text-shadow:0 1px 6px rgba(0,0,0,.6);
+}
+.d-sep{width:10px;height:2px;background:var(--gold);opacity:.6;align-self:center;}
+
+/* バッジ */
+.sub-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(10,8,40,.88);
+  border:1px solid var(--gold);
+  padding:6px 22px;
+  font-size:13px;color:var(--gold2);letter-spacing:.24em;
+  margin-bottom:20px;position:relative;z-index:2;
+  box-shadow:0 0 16px rgba(212,168,68,.12);
+}
+.sub-badge::before,.sub-badge::after{content:'◆';font-size:8px;opacity:.6;}
+
+/* キャッチコピー */
+.catch{
+  font-family:'Noto Serif JP',serif;
+  font-size:clamp(19px,4vw,32px);font-weight:700;
+  color:#fff;letter-spacing:.14em;line-height:1.5;
+  position:relative;z-index:2;
+  text-shadow:0 2px 24px rgba(140,80,255,.4);
+}
+.catch em{
+  font-style:normal;
+  background:linear-gradient(90deg,var(--gold2) 0%,var(--pink) 50%,var(--gold2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* ヘッダー底の雲+波 */
+.h-bottom{position:relative;z-index:2;margin-top:-2px;}
+.h-bottom svg{display:block;width:100%;}
+
+/* ═══ MAIN ═══ */
+main{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:36px 16px 90px;}
+
+/* 中間の雲装飾 */
+.section-cloud{
+  position:relative;height:60px;overflow:visible;
+  pointer-events:none;margin:-10px 0;
+}
+.sc-inner{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:140%;display:flex;justify-content:center;
+}
+
+/* ═══ フォームカード ═══ */
+.form-card{
+  background:linear-gradient(168deg,rgba(14,18,52,.97) 0%,rgba(10,12,38,.99) 100%);
+  border:1px solid var(--border);border-radius:14px;
+  padding:36px 32px;position:relative;overflow:hidden;
+  box-shadow:0 10px 50px rgba(0,0,0,.55),0 0 0 1px rgba(212,168,68,.06),inset 0 1px 0 rgba(212,168,68,.1);
+}
+.form-card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 90% 60% at 50% -10%,rgba(80,40,200,.12) 0%,transparent 55%);
+}
+/* カード内 雲 */
+.card-cloud{
+  position:absolute;pointer-events:none;
+  width:250px;height:60px;border-radius:50%;
+  filter:blur(30px);opacity:.07;
+}
+.card-cloud.cc1{background:rgba(120,80,240,1);top:10px;left:-40px;animation:ccmove 20s ease-in-out infinite;}
+.card-cloud.cc2{background:rgba(200,80,150,1);top:30px;right:-40px;animation:ccmove 25s ease-in-out infinite reverse;}
+@keyframes ccmove{0%,100%{transform:translateX(0);}50%{transform:translateX(20px);}}
+
+/* 四隅 */
+.cdeco{position:absolute;width:24px;height:24px;border-color:var(--gold);border-style:solid;opacity:.4;}
+.cdeco.tl{top:12px;left:12px;border-width:2px 0 0 2px;}
+.cdeco.tr{top:12px;right:12px;border-width:2px 2px 0 0;}
+.cdeco.bl{bottom:12px;left:12px;border-width:0 0 2px 2px;}
+.cdeco.br{bottom:12px;right:12px;border-width:0 2px 2px 0;}
+
+/* 龍の装飾紋 */
+.form-crest{
+  position:absolute;top:50%;right:18px;transform:translateY(-50%);
+  font-size:120px;opacity:.025;color:var(--gold);
+  font-family:'Noto Serif JP',serif;pointer-events:none;user-select:none;
+  line-height:1;
+}
+
+.ftitle{
+  font-family:'Noto Serif JP',serif;font-size:15px;font-weight:700;
+  color:var(--gold2);letter-spacing:.24em;text-align:center;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);
+}
+.ftitle::before,.ftitle::after{content:'✦';font-size:10px;margin:0 10px;opacity:.6;}
+
+.name-note{
+  font-size:12px;color:var(--text3);text-align:center;
+  margin-bottom:22px;line-height:1.85;
+  background:rgba(212,168,68,.04);
+  border:1px solid rgba(212,168,68,.08);
+  border-radius:8px;padding:11px 14px;
+}
+.name-note b{color:var(--gold);font-weight:500;}
+
+/* フォーム共通 */
+.fsec{margin-bottom:22px;}
+.flabel{font-size:11px;letter-spacing:.2em;color:var(--gold);margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+.req{font-size:10px;background:var(--red);color:#fff;padding:1px 7px;border-radius:3px;letter-spacing:.04em;}
+.opt{font-size:10px;color:var(--text3);letter-spacing:.06em;}
+
+.text-input{
+  width:100%;padding:11px 14px;
+  background:rgba(255,255,255,.055);border:1px solid rgba(212,168,68,.26);border-radius:7px;
+  color:var(--text);font-size:15px;font-family:'Noto Sans JP',sans-serif;
+  transition:border-color .2s,background .2s;
+}
+.text-input:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,.09);}
+.text-input::placeholder{color:var(--text3);}
+
+/* 日付 */
+.date-row{display:flex;gap:6px;align-items:flex-end;}
+.date-blk{flex:1;min-width:0;}
+.date-blk label{display:block;font-size:10px;color:var(--text3);letter-spacing:.1em;margin-bottom:5px;text-align:center;}
+.date-num{
+  width:100%;padding:12px 4px;
+  background:rgba(255,255,255,.055);border:1px solid rgba(212,168,68,.26);border-radius:7px;
+  color:var(--text);font-size:19px;font-family:'Noto Serif JP',serif;font-weight:700;
+  text-align:center;transition:border-color .2s,background .2s;
+  -moz-appearance:textfield;
+}
+.date-num::-webkit-inner-spin-button,.date-num::-webkit-outer-spin-button{-webkit-appearance:none;}
+.date-num:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,.09);}
+.date-num::placeholder{color:var(--text3);font-size:13px;font-family:'Noto Sans JP',sans-serif;font-weight:300;}
+.dunit{font-size:13px;color:var(--text3);padding-bottom:12px;flex-shrink:0;}
+
+/* 時刻 */
+.hgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:7px;}
+.hbtn{
+  padding:8px 3px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(212,168,68,.2);border-radius:6px;
+  color:var(--text2);font-size:11px;text-align:center;cursor:pointer;
+  transition:all .18s;line-height:1.45;user-select:none;
+}
+.hbtn:hover{background:rgba(212,168,68,.09);border-color:rgba(212,168,68,.5);}
+.hbtn.on{background:rgba(212,168,68,.18);border-color:var(--gold);color:var(--gold2);font-weight:500;}
+.hbtn b{font-family:'Noto Serif JP',serif;font-size:15px;display:block;}
+.hunk{
+  width:100%;padding:10px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(140,130,220,.18);border-radius:7px;
+  color:var(--text3);font-size:12px;text-align:center;cursor:pointer;
+  transition:all .2s;letter-spacing:.1em;user-select:none;
+}
+.hunk:hover{background:rgba(140,130,220,.07);}
+.hunk.on{background:rgba(100,90,200,.12);border-color:rgba(160,150,255,.38);color:#b8b4ff;}
+
+/* 性別 */
+.gender-row{display:flex;gap:10px;}
+.gbtn{
+  flex:1;padding:13px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(212,168,68,.26);border-radius:8px;
+  color:var(--text2);font-size:15px;font-family:'Noto Serif JP',serif;letter-spacing:.22em;
+  text-align:center;cursor:pointer;transition:all .22s;user-select:none;
+}
+.gbtn:hover{background:rgba(212,168,68,.08);}
+.gbtn.on{
+  background:linear-gradient(135deg,rgba(212,168,68,.2),rgba(200,70,80,.18));
+  border-color:var(--gold);color:var(--gold2);font-weight:600;
+  box-shadow:0 0 14px rgba(212,168,68,.14);
+}
+
+/* 送信ボタン */
+.submit-btn{
+  width:100%;margin-top:8px;padding:16px;
+  background:linear-gradient(135deg,#b01838 0%,#6010a0 100%);
+  border:none;border-radius:9px;color:#fff;
+  font-family:'Noto Serif JP',serif;font-size:17px;font-weight:700;letter-spacing:.3em;
+  cursor:pointer;position:relative;overflow:hidden;
+  box-shadow:0 4px 24px rgba(140,20,70,.5),0 0 0 1px rgba(212,168,68,.15);
+  transition:transform .25s,box-shadow .25s;
+}
+.submit-btn::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);
+  transform:translateX(-100%);transition:transform .5s;
+}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 7px 32px rgba(140,20,70,.65),0 0 0 1px rgba(212,168,68,.25);}
+.submit-btn:hover::after{transform:translateX(100%);}
+.submit-btn:active{transform:translateY(0);}
+
+.ferr{display:none;color:#ff8899;font-size:12px;text-align:center;margin-top:9px;letter-spacing:.1em;}
+
+/* ═══ RESULT ═══ */
+#result{display:none;margin-top:36px;}
+
+.res-hd{
+  text-align:center;padding:28px 16px 24px;
+  background:linear-gradient(165deg,rgba(14,6,50,.94),rgba(24,10,60,.96));
+  border:1px solid var(--border);border-radius:14px;
+  margin-bottom:24px;position:relative;overflow:hidden;
+}
+.res-hd::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 55% at 50% 0%,rgba(100,50,220,.2),transparent 60%);
+}
+/* 結果カード内雲 */
+.res-hd::after{
+  content:'';position:absolute;bottom:-20px;left:0;right:0;height:60px;
+  background:radial-gradient(ellipse 60% 100% at 50% 100%,rgba(80,40,180,.15),transparent 70%);
+  filter:blur(10px);
+}
+.rdate{font-size:12px;color:var(--text3);letter-spacing:.2em;margin-bottom:8px;position:relative;z-index:1;}
+.rtitle{
+  font-family:'Noto Serif JP',serif;font-size:clamp(17px,4vw,26px);font-weight:700;letter-spacing:.16em;
+  background:linear-gradient(90deg,var(--gold2),var(--pink) 50%,var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  position:relative;z-index:1;
+}
+.rnk{margin-top:10px;font-size:13px;color:var(--text2);letter-spacing:.14em;position:relative;z-index:1;}
+.rnk span{color:var(--teal2);font-weight:600;}
+
+/* タブ */
+.tabs{
+  display:flex;border:1px solid var(--border);border-radius:9px;
+  overflow:hidden;margin-bottom:22px;
+  box-shadow:0 2px 14px rgba(0,0,0,.3);
+}
+.tbtn{
+  flex:1;padding:12px 3px;
+  background:rgba(10,14,42,.85);border:none;border-right:1px solid var(--border);
+  color:var(--text3);font-size:11px;font-family:'Noto Sans JP',sans-serif;
+  letter-spacing:.07em;cursor:pointer;transition:all .2s;
+}
+.tbtn:last-child{border-right:none;}
+.tbtn:hover{background:rgba(212,168,68,.07);color:var(--text2);}
+.tbtn.on{
+  background:linear-gradient(160deg,rgba(70,35,150,.45),rgba(50,15,100,.55));
+  color:var(--gold2);font-weight:500;
+}
+.tpanel{display:none;}
+.tpanel.on{display:block;animation:fin .3s ease;}
+@keyframes fin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.sttl{
+  font-family:'Noto Serif JP',serif;font-size:13px;font-weight:600;
+  color:var(--gold);letter-spacing:.2em;margin-bottom:14px;
+  padding-left:11px;border-left:2px solid var(--gold);
+}
+
+/* 命式テーブル */
+.mwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:24px;}
+.mtbl{width:100%;min-width:280px;border-collapse:collapse;border:1px solid rgba(212,168,68,.2);}
+.mtbl th{
+  background:linear-gradient(165deg,rgba(30,14,70,.94),rgba(20,8,50,.96));
+  color:var(--gold);font-size:11px;letter-spacing:.2em;padding:10px 6px;
+  text-align:center;border:1px solid rgba(212,168,68,.16);
+  font-family:'Noto Serif JP',serif;font-weight:600;
+}
+.mtbl td{
+  padding:12px 6px;text-align:center;border:1px solid rgba(212,168,68,.11);
+  background:rgba(10,14,44,.65);vertical-align:middle;
+}
+.mtbl tr:hover td{background:rgba(212,168,68,.04);}
+.rl{font-size:10px;color:var(--text3);letter-spacing:.12em;}
+.kt{font-family:'Noto Serif JP',serif;font-size:26px;font-weight:700;color:#ff9aaa;line-height:1;display:block;}
+.st{font-family:'Noto Serif JP',serif;font-size:26px;font-weight:700;color:var(--teal2);line-height:1;display:block;}
+.subt{font-size:10px;color:var(--text3);margin-top:3px;display:block;}
+.tst{font-family:'Noto Serif JP',serif;font-size:15px;font-weight:600;color:var(--gold2);}
+.jst{font-size:12px;color:var(--teal);margin-top:3px;}
+
+/* 五行 */
+.gbars{display:flex;gap:8px;margin-bottom:14px;}
+.gc{flex:1;text-align:center;}
+.gname{font-size:12px;color:var(--text2);margin-bottom:7px;font-family:'Noto Serif JP',serif;}
+.gbg{height:90px;background:rgba(255,255,255,.04);border-radius:4px;display:flex;align-items:flex-end;overflow:hidden;}
+.gfill{width:100%;border-radius:4px 4px 0 0;transition:height .95s cubic-bezier(.22,1,.36,1);}
+.gpct{font-size:11px;font-weight:500;color:var(--text2);margin-top:4px;}
+.gfill.ki{background:linear-gradient(180deg,#4ade80,#166534);}
+.gfill.ka{background:linear-gradient(180deg,#f87171,#991b1b);}
+.gfill.do{background:linear-gradient(180deg,#fbbf24,#92400e);}
+.gfill.gon{background:linear-gradient(180deg,#94a3b8,#334155);}
+.gfill.sui{background:linear-gradient(180deg,#60a5fa,#1e3a8a);}
+
+.swrap{display:flex;align-items:center;gap:10px;margin:12px 0;}
+.sbg{flex:1;height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;}
+.sfill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--teal),var(--gold));transition:width 1.2s cubic-bezier(.22,1,.36,1);}
+.send{font-size:11px;color:var(--text3);}
+.sval{font-size:13px;font-weight:700;color:var(--gold2);min-width:46px;text-align:right;}
+
+/* 大運 */
+.dlist{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;}
+.dc{
+  min-width:78px;flex-shrink:0;
+  border:1px solid rgba(212,168,68,.18);border-radius:8px;
+  padding:10px 5px;text-align:center;
+  background:rgba(10,14,44,.7);transition:all .2s;
+}
+.dc.cur{
+  border-color:var(--gold);
+  background:linear-gradient(165deg,rgba(80,50,8,.35),rgba(50,20,0,.45));
+  box-shadow:0 0 16px rgba(212,168,68,.2);
+}
+.dage{font-size:10px;color:var(--text3);margin-bottom:5px;}
+.dkan{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:700;color:#ff9aaa;}
+.dshi{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:700;color:var(--teal2);}
+.dnow{font-size:10px;color:var(--gold);margin-top:4px;}
+
+/* ═══ 性格タブ：2枚カードのみ ═══ */
+.essence-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:560px){.essence-grid{grid-template-columns:1fr;}}
+
+.essence-card{
+  position:relative;overflow:hidden;
+  background:linear-gradient(165deg,rgba(14,10,50,.92),rgba(10,7,38,.96));
+  border:1px solid rgba(212,168,68,.22);border-radius:12px;
+  padding:24px 20px;
+  box-shadow:0 4px 24px rgba(0,0,0,.4);
+}
+/* カード内の雲 */
+.essence-card::before{
+  content:'';position:absolute;top:-20px;right:-30px;
+  width:160px;height:80px;border-radius:50%;
+  filter:blur(28px);pointer-events:none;
+  transition:opacity .3s;
+}
+.essence-card:first-child::before{background:rgba(100,50,220,.18);}
+.essence-card:last-child::before{background:rgba(180,50,120,.16);}
+.essence-card:hover{border-color:rgba(212,168,68,.4);box-shadow:0 6px 32px rgba(0,0,0,.5);}
+
+/* カードアイコン */
+.ecard-icon{
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:14px;
+  border:1px solid rgba(212,168,68,.3);
+  position:relative;z-index:1;
+}
+.ecard-icon.icon-self{background:linear-gradient(135deg,rgba(100,50,200,.3),rgba(60,20,120,.4));}
+.ecard-icon.icon-talent{background:linear-gradient(135deg,rgba(180,80,40,.3),rgba(120,40,20,.4));}
+
+.ecard-label{
+  font-size:10px;letter-spacing:.3em;color:var(--gold);
+  margin-bottom:6px;position:relative;z-index:1;
+}
+.ecard-title{
+  font-family:'Noto Serif JP',serif;font-size:16px;font-weight:700;
+  color:var(--text);margin-bottom:14px;letter-spacing:.1em;
+  position:relative;z-index:1;
+}
+.ecard-divider{
+  width:32px;height:1px;background:var(--gold);opacity:.4;
+  margin-bottom:14px;
+}
+.ecard-body{
+  font-size:13px;color:var(--text2);line-height:2;
+  position:relative;z-index:1;
+}
+/* キーワードタグ */
+.kw-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.kw-tag{
+  font-size:11px;padding:3px 10px;border-radius:20px;
+  border:1px solid rgba(212,168,68,.25);color:var(--gold2);
+  background:rgba(212,168,68,.07);letter-spacing:.06em;
+}
+
+/* 注記 */
+.notice{
+  margin-top:28px;padding:14px 18px;
+  background:rgba(255,255,255,.025);border-radius:8px;
+  border-left:2px solid rgba(212,168,68,.28);
+  font-size:11px;color:var(--text3);line-height:2;
+}
+
+/* フッター */
+footer{
+  position:relative;z-index:2;
+  background:rgba(3,4,14,.96);
+  text-align:center;padding:24px;
+  font-size:11px;color:var(--text3);letter-spacing:.2em;
+  border-top:1px solid rgba(212,168,68,.07);
+}
+
+@media(max-width:580px){
+  .form-card{padding:22px 14px;}
+  .d-tile{width:50px;height:50px;} .d-tile span{font-size:17px;}
+  .hgrid{grid-template-columns:repeat(3,1fr);}
+  .tabs .tbtn{font-size:10px;padding:10px 2px;}
+  .date-row{gap:4px;}
+  .form-crest{display:none;}
+}
+</style>
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
-<header class="site-header">
-  <div class="lantern lantern-left">🏮</div>
-  <div class="header-inner">
-    <div class="diamonds-row">
-      <span class="diamond">四</span>
-      <span class="diamond">柱</span>
-      <span class="diamond">推</span>
-      <span class="diamond">命</span>
-      <span class="diamond">の</span>
-      <span class="diamond">日</span>
+<!-- 背景レイヤー -->
+<div id="bg-layer">
+  <canvas id="stars"></canvas>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+  <div class="cloud c4"></div>
+  <div class="cloud c5"></div>
+  <div class="cloud w1"></div>
+  <div class="cloud w2"></div>
+  <div class="cloud w3"></div>
+  <div class="bg-glow g1"></div>
+  <div class="bg-glow g2"></div>
+</div>
+
+<!-- ヘッダー -->
+<header>
+  <div class="hbg">
+    <!-- ヘッダー内 雲SVG -->
+    <svg class="h-cloud hc1" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="120" cy="60" rx="110" ry="35" fill="rgba(160,130,255,.6)"/>
+      <ellipse cx="240" cy="55" rx="140" ry="30" fill="rgba(180,150,255,.5)"/>
+      <ellipse cx="300" cy="65" rx="90" ry="28" fill="rgba(140,110,240,.55)"/>
+      <ellipse cx="80"  cy="70" rx="70"  ry="22" fill="rgba(150,120,250,.45)"/>
+    </svg>
+    <svg class="h-cloud hc2" viewBox="0 0 320 90" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="160" cy="55" rx="130" ry="32" fill="rgba(200,150,255,.5)"/>
+      <ellipse cx="80"  cy="60" rx="75"  ry="25" fill="rgba(180,130,245,.45)"/>
+      <ellipse cx="240" cy="62" rx="75"  ry="24" fill="rgba(160,120,230,.4)"/>
+    </svg>
+    <svg class="h-cloud hc3" viewBox="0 0 260 70" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="130" cy="45" rx="110" ry="25" fill="rgba(220,200,255,.7)"/>
+      <ellipse cx="70"  cy="50" rx="65"  ry="20" fill="rgba(200,180,255,.6)"/>
+      <ellipse cx="190" cy="48" rx="65"  ry="20" fill="rgba(210,190,255,.55)"/>
+    </svg>
+
+    <!-- ランタン -->
+    <div class="lantern-wrap">
+      <div class="ln"><div class="ln-string"></div><div class="ln-top"></div><div class="ln-body"></div><div class="ln-tail"></div></div>
+      <div class="ln"><div class="ln-string"></div><div class="ln-top"></div><div class="ln-body"></div><div class="ln-tail"></div></div>
+      <div class="ln"><div class="ln-string"></div><div class="ln-top"></div><div class="ln-body"></div><div class="ln-tail"></div></div>
     </div>
-    <div class="subtitle-badge">杏月先生 総括</div>
-    <h1 class="header-catch">あなたと相手の<span class="gold">相性</span></h1>
-    <p class="header-sub">生年月日から読み解く、あなたの本質と運命</p>
+
+    <!-- タイトル -->
+    <div class="diamond-title">
+      <div class="d-tile"><span>四</span></div>
+      <div class="d-sep"></div>
+      <div class="d-tile"><span>柱</span></div>
+      <div class="d-sep"></div>
+      <div class="d-tile"><span>推</span></div>
+      <div class="d-sep"></div>
+      <div class="d-tile"><span>命</span></div>
+      <div class="d-sep"></div>
+      <div class="d-tile"><span>の</span></div>
+      <div class="d-sep"></div>
+      <div class="d-tile"><span>日</span></div>
+    </div>
+
+    <div class="sub-badge">命式鑑定　無料・本格</div>
+    <p class="catch">あなたの<em>命式</em>と<em>本質</em>を読む</p>
   </div>
-  <div class="lantern lantern-right">🏮</div>
-  <div class="stars-bg"></div>
+
+  <!-- 底の波＋雲 -->
+  <div class="h-bottom" style="background:linear-gradient(170deg,#0b0e28,#0a0d1f);position:relative;overflow:hidden;height:48px;">
+    <svg viewBox="0 0 1440 48" preserveAspectRatio="none" style="position:absolute;top:0;left:0;width:100%;height:100%;" xmlns="http://www.w3.org/2000/svg">
+      <!-- 雲の稜線 -->
+      <path d="M0,30 C80,10 160,38 240,22 C320,6 400,34 480,20 C560,6 640,36 720,20 C800,4 880,32 960,18 C1040,4 1120,34 1200,20 C1280,6 1360,30 1440,16 L1440,48 L0,48 Z" fill="#0a0d1f"/>
+    </svg>
+  </div>
 </header>
 
-<!-- ===== STEP FLOW ===== -->
 <main>
-  <!-- STEP 1: 入力フォーム -->
-  <section id="step-input" class="step active">
-    <div class="container">
-      <div class="step-label"><span>STEP 1</span> 生年月日を入力</div>
-      <div class="card form-card">
-        <div class="form-group">
-          <label>お名前（ニックネーム可）</label>
-          <input type="text" id="name" placeholder="例：山田 花子" maxlength="20" />
+  <!-- フォームカード -->
+  <div class="form-card">
+    <div class="card-cloud cc1"></div>
+    <div class="card-cloud cc2"></div>
+    <div class="cdeco tl"></div><div class="cdeco tr"></div>
+    <div class="cdeco bl"></div><div class="cdeco br"></div>
+    <div class="form-crest">命</div>
+
+    <h2 class="ftitle">命式鑑定フォーム</h2>
+
+    <p class="name-note">
+      <b>✦ 名前の入力は不要です</b><br>
+      四柱推命の命式は「生年月日・出生時刻・性別」のみで算出されます。<br>
+      お名前は結果画面の表示にのみ使います（入力は任意）。
+    </p>
+
+    <div class="fsec">
+      <div class="flabel">お名前 <span class="opt">（任意・表示のみ）</span></div>
+      <input type="text" id="inp-name" class="text-input" placeholder="例：山田 花子"/>
+    </div>
+
+    <div class="fsec">
+      <div class="flabel">生年月日 <span class="req">必須</span></div>
+      <div class="date-row">
+        <div class="date-blk">
+          <label>西暦（年）</label>
+          <input type="number" id="iy" class="date-num" placeholder="1990" min="1900" max="2030" inputmode="numeric"/>
         </div>
-        <div class="form-group">
-          <label>生年月日</label>
-          <div class="date-row">
-            <div class="select-wrap">
-              <select id="birth-year"></select>
-              <span class="unit">年</span>
-            </div>
-            <div class="select-wrap">
-              <select id="birth-month"></select>
-              <span class="unit">月</span>
-            </div>
-            <div class="select-wrap">
-              <select id="birth-day"></select>
-              <span class="unit">日</span>
-            </div>
-          </div>
+        <span class="dunit">年</span>
+        <div class="date-blk" style="max-width:76px;">
+          <label>月</label>
+          <input type="number" id="im" class="date-num" placeholder="7" min="1" max="12" inputmode="numeric"/>
         </div>
-        <div class="form-group">
-          <label>性別</label>
-          <div class="gender-row">
-            <button class="gender-btn active" data-gender="female">女性</button>
-            <button class="gender-btn" data-gender="male">男性</button>
-          </div>
+        <span class="dunit">月</span>
+        <div class="date-blk" style="max-width:76px;">
+          <label>日</label>
+          <input type="number" id="id" class="date-num" placeholder="15" min="1" max="31" inputmode="numeric"/>
         </div>
-        <div class="form-group">
-          <label>出生時刻（わかる場合）</label>
-          <div class="time-row">
-            <div class="select-wrap">
-              <select id="birth-hour">
-                <option value="-1">不明</option>
-              </select>
-              <span class="unit">時</span>
-            </div>
-          </div>
-        </div>
-        <button class="btn-primary" id="btn-diagnose">
-          <span class="btn-icon">✦</span> 無料で鑑定する <span class="btn-icon">✦</span>
-        </button>
-        <p class="note">※ 個人情報は収集・保存されません</p>
+        <span class="dunit">日</span>
       </div>
     </div>
-  </section>
 
-  <!-- STEP 2: 鑑定結果 -->
-  <section id="step-result" class="step">
-    <div class="container">
-      <div class="step-label"><span>STEP 2</span> 簡易鑑定結果</div>
-
-      <!-- 命式表 -->
-      <div class="result-block">
-        <div class="result-title">
-          <span class="icon-title">📜</span> 命式表
-        </div>
-        <div class="card">
-          <div class="meishiki-grid" id="meishiki-table">
-            <!-- JS挿入 -->
-          </div>
-          <div class="meishiki-legend">
-            <span>年柱</span><span>月柱</span><span>日柱</span><span>時柱</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 属性 -->
-      <div class="result-block">
-        <div class="result-title">
-          <span class="icon-title">🌊</span> あなたの属性
-        </div>
-        <div class="card attribute-card" id="attribute-card">
-          <!-- JS挿入 -->
-        </div>
-      </div>
-
-      <!-- 本質 -->
-      <div class="result-block">
-        <div class="result-title">
-          <span class="icon-title">⭐</span> あなたの本質
-        </div>
-        <div class="card essence-card" id="essence-card">
-          <!-- JS挿入 -->
-        </div>
-      </div>
-
-      <!-- 杏月先生への誘導 -->
-      <div class="cta-block">
-        <div class="cta-inner">
-          <div class="cta-badge">杏月先生による</div>
-          <h2 class="cta-title">本格鑑定で<br><span class="gold">あなたの未来</span>を<br>詳しく読み解きます</h2>
-          <ul class="cta-list">
-            <li>✦ 今後の運勢・転機の時期</li>
-            <li>✦ 恋愛・結婚の相性と運命</li>
-            <li>✦ 仕事・金運の流れ</li>
-            <li>✦ あなただけの開運アドバイス</li>
-          </ul>
-          <a href="#" class="btn-cta" id="btn-cta">
-            <span>杏月先生に本格鑑定を依頼する</span>
-            <span class="arrow">→</span>
-          </a>
-          <p class="cta-note">＊ 簡易鑑定の結果が自動で引き継がれます</p>
-        </div>
-      </div>
-
-      <button class="btn-back" id="btn-back">← もう一度診断する</button>
+    <div class="fsec">
+      <div class="flabel">出生時刻 <span class="opt">（わからない場合は「不明」を選択）</span></div>
+      <div class="hgrid" id="hgrid"></div>
+      <div class="hunk on" id="hunk" onclick="selUnknown()">☽ 出生時刻 不明（時柱なしで鑑定）</div>
     </div>
-  </section>
+
+    <div class="fsec">
+      <div class="flabel">性別 <span class="req">必須</span></div>
+      <div class="gender-row">
+        <div class="gbtn on" id="gm" onclick="setG('male')">♂ 男性</div>
+        <div class="gbtn" id="gf" onclick="setG('female')">♀ 女性</div>
+      </div>
+    </div>
+
+    <button class="submit-btn" onclick="calc()">✦ 命式を鑑定する</button>
+    <div class="ferr" id="ferr"></div>
+  </div>
+
+  <!-- 結果 -->
+  <div id="result">
+    <div class="res-hd">
+      <p class="rdate" id="rdate"></p>
+      <p class="rtitle" id="rtitle">命式鑑定結果</p>
+      <p class="rnk" id="rnk">日主：<span>─</span></p>
+    </div>
+
+    <div class="tabs">
+      <button class="tbtn on" onclick="showTab('t1')">命式・通変星</button>
+      <button class="tbtn" onclick="showTab('t2')">五行バランス</button>
+      <button class="tbtn" onclick="showTab('t3')">大運</button>
+      <button class="tbtn" onclick="showTab('t4')">本質と才能</button>
+    </div>
+
+    <div class="tpanel on" id="t1">
+      <p class="sttl">命式（四柱）</p>
+      <div class="mwrap"><table class="mtbl" id="mtbl"></table></div>
+      <p class="sttl">通変星・十二運</p>
+      <div class="mwrap"><table class="mtbl" id="ttbl"></table></div>
+    </div>
+
+    <div class="tpanel" id="t2">
+      <p class="sttl">五行バランス</p>
+      <div class="gbars" id="gbars"></div>
+      <p id="gcom" style="font-size:13px;color:var(--text2);line-height:1.95;margin-bottom:22px;"></p>
+      <p class="sttl">日主の身強・身弱</p>
+      <div class="swrap">
+        <span class="send">弱</span>
+        <div class="sbg"><div class="sfill" id="sfill" style="width:50%"></div></div>
+        <span class="send">強</span>
+        <span class="sval" id="sval">50%</span>
+      </div>
+      <p id="scom" style="font-size:13px;color:var(--text2);line-height:1.95;"></p>
+    </div>
+
+    <div class="tpanel" id="t3">
+      <p class="sttl">大運（10年ごとの運気の流れ）</p>
+      <div class="dlist" id="dlist"></div>
+      <p style="font-size:11px;color:var(--text3);margin-top:12px;line-height:1.9;">★ は現在の大運です。大運は10年周期で変わる運気の大きな流れを示します。</p>
+    </div>
+
+    <div class="tpanel" id="t4">
+      <!-- 2枚カードのみ -->
+      <div class="essence-grid" id="essence-grid"></div>
+    </div>
+
+    <div class="notice">
+      ※ 命式計算は立春節入り方式（各月の節気基準）を採用し、4chu.net・suimei-mobile.com 等複数サービスのアルゴリズムを参考に平均化した手法を採用しています。<br>
+      ※ 出生時刻が不明な場合、時柱は省略されます。より精密な鑑定には出生時刻の入力をお勧めします。
+    </div>
+  </div>
 </main>
 
-<footer class="site-footer">
-  <p>© 2025 四柱推命の日｜杏月先生鑑定室</p>
-</footer>
+<footer>© 2025 四柱推命の日 ─ 命式鑑定　無料・本格</footer>
 
-<script src="suimei.js"></script>
+<script>
+/* ════════════════════════════════
+   背景 星空
+════════════════════════════════ */
+(function(){
+  const c=document.getElementById('stars'),ctx=c.getContext('2d');
+  let s=[];
+  const resize=()=>{c.width=window.innerWidth;c.height=window.innerHeight;};
+  const init=()=>{s=[];for(let i=0;i<220;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.5+.25,a:Math.random(),da:(Math.random()-.5)*.0035+.0015});};
+  const draw=()=>{
+    ctx.clearRect(0,0,c.width,c.height);
+    s.forEach(p=>{
+      p.a+=p.da;if(p.a>1||p.a<0)p.da*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(210,200,255,${p.a})`;ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  };
+  resize();init();draw();
+  window.addEventListener('resize',()=>{resize();init();});
+})();
+
+/* ════════════════════════════════
+   時刻ボタン生成
+════════════════════════════════ */
+const JIKOKU=[
+  {l:'子',s:'23〜1時',h:23},{l:'丑',s:'1〜3時',h:1},
+  {l:'寅',s:'3〜5時',h:3},{l:'卯',s:'5〜7時',h:5},
+  {l:'辰',s:'7〜9時',h:7},{l:'巳',s:'9〜11時',h:9},
+  {l:'午',s:'11〜13時',h:11},{l:'未',s:'13〜15時',h:13},
+  {l:'申',s:'15〜17時',h:15},{l:'酉',s:'17〜19時',h:17},
+  {l:'戌',s:'19〜21時',h:19},{l:'亥',s:'21〜23時',h:21},
+];
+(function(){
+  const g=document.getElementById('hgrid');
+  JIKOKU.forEach(j=>{
+    const b=document.createElement('div');
+    b.className='hbtn';b.dataset.h=j.h;
+    b.innerHTML=`<b>${j.l}</b>${j.s}`;
+    b.onclick=()=>selHour(j.h,b);
+    g.appendChild(b);
+  });
+})();
+
+let selH=-1,selGender='male';
+function selHour(h,btn){
+  selH=h;
+  document.querySelectorAll('.hbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('hunk').classList.remove('on');
+}
+function selUnknown(){
+  selH=-1;
+  document.querySelectorAll('.hbtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('hunk').classList.add('on');
+}
+function setG(g){
+  selGender=g;
+  document.getElementById('gm').classList.toggle('on',g==='male');
+  document.getElementById('gf').classList.toggle('on',g==='female');
+}
+function showTab(id){
+  document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  const i=['t1','t2','t3','t4'].indexOf(id);
+  document.querySelectorAll('.tbtn')[i].classList.add('on');
+}
+
+/* ════════════════════════════════
+   四柱推命 計算エンジン
+════════════════════════════════ */
+const TK=['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const CS=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const KY=['きのえ','きのと','ひのえ','ひのと','つちのえ','つちのと','かのえ','かのと','みずのえ','みずのと'];
+const SY=['ね','うし','とら','う','たつ','み','うま','ひつじ','さる','とり','いぬ','い'];
+const KG=['木','木','火','火','土','土','金','金','水','水'];
+const SG=['水','土','木','木','土','火','火','土','金','金','土','水'];
+const KI=['陽','陰','陽','陰','陽','陰','陽','陰','陽','陰'];
+const ZOKAN={子:['壬'],丑:['己','癸','辛'],寅:['甲','丙','戊'],卯:['乙'],辰:['戊','乙','癸'],巳:['丙','庚','戊'],午:['丁','己'],未:['己','丁','乙'],申:['庚','壬','戊'],酉:['辛'],戌:['戊','辛','丁'],亥:['壬','甲']};
+const GC={'木':'火','火':'土','土':'金','金':'水','水':'木'};
+const GK={'木':'土','土':'水','水':'火','火':'金','金':'木'};
+const JUNIIN=['長生','沐浴','冠帯','建禄','帝旺','衰','病','死','墓','絶','胎','養'];
+const JUNIIN_START={甲:'亥',乙:'午',丙:'寅',丁:'酉',戊:'寅',己:'酉',庚:'巳',辛:'子',壬:'申',癸:'卯'};
+const SETSU={2:4,3:6,4:5,5:6,6:6,7:7,8:8,9:8,10:8,11:7,12:7,1:6};
+
+function getTS(ji,ni){
+  const jg=KG[ji],ng=KG[ni],ji_=KI[ji],ni_=KI[ni];
+  if(jg===ng)return ji_===ni_?'比肩':'劫財';
+  if(GC[jg]===ng)return ji_===ni_?'食神':'傷官';
+  if(GK[ng]===jg)return ji_===ni_?'偏財':'正財';
+  if(GK[jg]===ng)return ji_===ni_?'偏官':'正官';
+  if(GC[ng]===jg)return ji_===ni_?'偏印':'印綬';
+  return '─';
+}
+function getJuniin(kan,shi){
+  const st=JUNIIN_START[kan];if(!st)return'─';
+  const si=CS.indexOf(st),xi=CS.indexOf(shi),ki=KI[TK.indexOf(kan)];
+  const step=ki==='陰'?(si-xi+12)%12:(xi-si+12)%12;
+  return JUNIIN[step];
+}
+function getSetsuM(y,m,d){
+  const sd=SETSU[m]||6;
+  let mm=d<sd?m-1:m;
+  if(mm<=0)mm+=12;
+  const map={2:0,3:1,4:2,5:3,6:4,7:5,8:6,9:7,10:8,11:9,12:10,1:11};
+  return map[mm]??0;
+}
+function getJD(y,m,d){
+  if(m<3){y--;m+=12;}
+  const A=Math.floor(y/100),B=2-A+Math.floor(A/4);
+  return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524;
+}
+function yearKS(y,m,d){
+  let yr=y;
+  if(m<2||(m===2&&d<(SETSU[2]||4)))yr--;
+  return{ki:((yr-4)%10+10)%10,si:((yr-4)%12+12)%12};
+}
+function monthKS(y,m,d){
+  const yk=yearKS(y,m,d);
+  const sm=getSetsuM(y,m,d);
+  const mkStart=[2,4,6,8,0][yk.ki%5];
+  return{ki:(mkStart+sm)%10,si:(2+sm)%12};
+}
+function dayKS(y,m,d){
+  const jd=getJD(y,m,d);
+  return{ki:((jd+9)%10+10)%10,si:((jd+1)%12+12)%12};
+}
+function hourKS(h,dki){
+  const si=Math.floor(((h+1)%24)/2)%12;
+  const kst=[0,2,4,6,8][dki%5];
+  return{ki:(kst+si)%10,si};
+}
+function calcGogyo(pillars){
+  const c={木:0,火:0,土:0,金:0,水:0};
+  pillars.forEach(p=>{
+    if(p.ki>=0)c[KG[p.ki]]+=1;
+    if(p.si>=0)c[SG[p.si]]+=1;
+    (ZOKAN[CS[p.si]]||[]).forEach(z=>c[KG[TK.indexOf(z)]]+=.5);
+  });
+  return c;
+}
+function calcDaiu(y,m,d,gender,ykIdx){
+  const yyo=ykIdx%2===0?'陽':'陰';
+  const junko=(gender==='male'&&yyo==='陽')||(gender==='female'&&yyo==='陰');
+  const sd=SETSU[m]||6;
+  const diff=Math.abs(junko?sd-d:d-sd);
+  const startAge=Math.max(1,Math.round(diff/3));
+  const mk=monthKS(y,m,d);
+  const res=[];
+  for(let i=0;i<8;i++){
+    const sh=junko?i+1:-(i+1);
+    res.push({
+      ki:((mk.ki+sh)%10+10)%10,
+      si:((mk.si+sh)%12+12)%12,
+      age:startAge+i*10
+    });
+  }
+  return{startAge,daiu:res};
+}
+
+/* ════════════════════════════════
+   本質テキストデータ
+════════════════════════════════ */
+const SELF_TEXT={
+  甲:{title:'大樹の魂',body:'まっすぐに天へ伸びる大木のような存在です。曲がったことを嫌い、正道を歩むことへの強い意志を持ちます。困難があっても根を張り、折れることなく立ち続ける不屈の精神が本来の姿です。',kw:['正直','向上心','不屈','リーダーシップ','誠実']},
+  乙:{title:'柔かな蔓の魂',body:'風に揺れながらも確かに絡みつく蔓草のような存在です。しなやかに環境へ適応しながら、目指す場所へと着実に伸びていきます。穏やかな外見の内側に、粘り強い意志と繊細な感受性を秘めています。',kw:['柔軟性','協調','粘り強さ','感受性','適応力']},
+  丙:{title:'太陽の魂',body:'すべてを照らす太陽のように、明るく開かれた存在です。周囲を自然と温め、人を集める輝きがあります。隠すことなく感情を表現し、行動でもって世界に働きかける積極性が本来の姿です。',kw:['明朗','情熱','社交性','行動力','カリスマ']},
+  丁:{title:'灯火の魂',body:'暗闇を静かに照らすろうそくの炎のような存在です。派手さはなくとも、確かな光で人の心を暖めます。繊細な洞察力と深い精神性を持ち、内なる世界を豊かに育てることが本来の姿です。',kw:['思いやり','洞察','芸術性','精神性','忍耐']},
+  戊:{title:'大山の魂',body:'揺るぎない大山のような安定と包容力を持つ存在です。どっしりと構え、周囲の動揺にも動じません。信頼と責任を重んじ、縁の下で人々を支える誠実さが本来の姿です。',kw:['安定','包容力','誠実','忍耐','信頼感']},
+  己:{title:'肥沃な大地の魂',body:'あらゆるものを受け入れ育てる豊かな大地のような存在です。穏やかで細やかな気配りにより、人々の心に安らぎをもたらします。内面の豊かさと実直さが本来の姿です。',kw:['包容力','気配り','実直','穏やか','育む力']},
+  庚:{title:'鋭刃の魂',body:'磨かれた刃のように、鋭く正義を貫く存在です。曖昧さを嫌い、白黒はっきりとした態度で物事に向き合います。義理を重んじ、決断と実行を恐れない強さが本来の姿です。',kw:['正義感','決断力','直截','義理','実行力']},
+  辛:{title:'宝石の魂',body:'研磨された宝石のように、美しさと鋭さを兼ね備えた存在です。高い審美眼と完璧への追求心を持ち、細部にまでこだわります。傷つきやすい繊細さを内に秘めながら、輝きを放ち続けるのが本来の姿です。',kw:['完璧主義','美意識','繊細','こだわり','洗練']},
+  壬:{title:'大海の魂',body:'すべてを包み込む大海のような、スケールの大きな存在です。自由を愛し、既成概念にとらわれない広大な発想で世界を切り拓きます。どんな器にも形を変えながら、本質を失わない柔剛の精神が本来の姿です。',kw:['自由','スケール','冒険心','包容力','革新']},
+  癸:{title:'静雨の魂',body:'静かに大地に染み込む雨のように、物事の本質を見抜く深い知性を持つ存在です。表面に現れることなく、内面で豊かに思索します。独自の世界観と直感力で真実に近づくことが本来の姿です。',kw:['知性','直感','内省','洞察','独自性']},
+};
+
+const TALENT_TEXT={
+  甲:{title:'開拓と指導の才能',body:'新しい道を切り拓き、人を導く才能があります。目標を定めたら迷わず前進できるリーダーシップと、長期的な視野で物事を育てる力が際立ちます。',kw:['リーダー','開拓','育成','企画','挑戦']},
+  乙:{title:'つなぎ調和させる才能',body:'人と人、物と物をなめらかにつなぐ才能があります。空気を読む繊細さと、場を和やかにする柔らかな力が際立ちます。コツコツと継続する中で着実に成果を積み上げます。',kw:['調整','コミュニケーション','継続力','共感','サポート']},
+  丙:{title:'表現と照らす才能',body:'人を惹きつけ、場を明るく輝かせる才能があります。感情を素直に表現し、情熱で周囲を動かす力が際立ちます。アイデアを形にし、広く伝える表現力が強みです。',kw:['表現力','PR','エンタメ','感化','プレゼン']},
+  丁:{title:'磨き輝かせる才能',body:'人やモノの可能性を見抜き、丁寧に磨き輝かせる才能があります。じっくりと向き合い、本質を引き出す深い洞察力が際立ちます。芸術・教育・カウンセリングでその力が光ります。',kw:['洞察','教育','芸術','カウンセリング','磨く']},
+  戊:{title:'守り支える才能',body:'大きな器で人を受け止め、組織を安定させる才能があります。責任感と行動の一貫性で、長期にわたって信頼を積み上げる力が際立ちます。',kw:['管理','組織力','信頼','継続','安定化']},
+  己:{title:'育て実らせる才能',body:'人の可能性を丁寧に育て、豊かに実らせる才能があります。細やかな観察力と、地道な積み重ねへの親しみが際立ちます。教育・医療・農業・食分野でその力を発揮します。',kw:['育成','観察','細やかさ','実務','サポート']},
+  庚:{title:'決断と突破の才能',body:'課題をはっきりと見定め、一気に突破する才能があります。素早い判断と、プレッシャー下でこそ輝く実行力が際立ちます。競争・戦略・法・金融の分野で存在感を放ちます。',kw:['決断','実行','戦略','競争','突破力']},
+  辛:{title:'完成させ美しくする才能',body:'物事を細部まで磨き上げ、完成された美しさに仕上げる才能があります。高い審美眼と品質へのこだわりが際立ちます。デザイン・審査・品質管理などで卓越した力を発揮します。',kw:['審美','品質','完成度','デザイン','精緻']},
+  壬:{title:'流し広げる才能',body:'情報・人・資源を縦横無尽に流通させ、広げる才能があります。大局を読む視点と、流れに乗る柔軟さが際立ちます。貿易・IT・流通・コンサルティングなど広域の分野で輝きます。',kw:['流通','大局観','ネットワーク','柔軟','スケール']},
+  癸:{title:'深く見抜く才能',body:'表面の奥にある真実を見抜き、本質を言葉にする才能があります。鋭い直感と、データや細部を丁寧に読み解く知性が際立ちます。研究・分析・執筆・占術などで際立った力を発揮します。',kw:['洞察','分析','研究','直感','言語化']},
+};
+
+/* ════════════════════════════════
+   メイン計算 + DOM 構築
+════════════════════════════════ */
+function calc(){
+  const y=parseInt(document.getElementById('iy').value);
+  const m=parseInt(document.getElementById('im').value);
+  const d=parseInt(document.getElementById('id').value);
+  const name=document.getElementById('inp-name').value.trim()||'あなた';
+  const ferr=document.getElementById('ferr');
+
+  if(isNaN(y)||isNaN(m)||isNaN(d)||y<1900||m<1||m>12||d<1||d>31){
+    ferr.style.display='block';ferr.textContent='⚠ 生年月日を正しく入力してください';return;
+  }
+  ferr.style.display='none';
+
+  const yk=yearKS(y,m,d);
+  const mk=monthKS(y,m,d);
+  const dk=dayKS(y,m,d);
+  const hasH=selH>=0;
+  const hk=hasH?hourKS(selH,dk.ki):null;
+
+  const pillars=[
+    {label:'年柱',...yk},
+    {label:'月柱',...mk},
+    {label:'日柱',...dk},
+    ...(hk?[{label:'時柱',...hk}]:[]),
+  ];
+
+  const nki=dk.ki; // 日主インデックス
+  const nkan=TK[nki];
+
+  // 通変星リスト
+  const tsList=pillars.map((p,i)=>{
+    if(i===2)return{label:'日主',ts:'─',ju:'─'};
+    return{label:p.label,ts:getTS(nki,p.ki),ju:getJuniin(nkan,CS[p.si])};
+  });
+
+  const gogyo=calcGogyo(pillars);
+  const now=new Date();
+  const age=now.getFullYear()-y-(now.getMonth()+1<m||(now.getMonth()+1===m&&now.getDate()<d)?1:0);
+  const {startAge,daiu}=calcDaiu(y,m,d,selGender,yk.ki);
+
+  // ヘッダー更新
+  document.getElementById('rdate').textContent=`生年月日：${y}年${m}月${d}日　${hasH?`出生時刻：${JIKOKU.find(j=>j.h===selH)?.l||''}の刻`:'出生時刻：不明'}　${selGender==='male'?'男性':'女性'}`;
+  document.getElementById('rtitle').textContent=`${name} 様の命式`;
+  document.getElementById('rnk').innerHTML=`日主：<span>${nkan}（${KG[nki]}・${KI[nki]}）</span>`;
+
+  buildMeishiki(pillars);
+  buildTsuhen(tsList);
+  buildGogyo(gogyo,nki);
+  buildDaiu(daiu,age);
+  buildEssence(nkan,nki,gogyo);
+
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+  showTab('t1');
+}
+
+/* 命式テーブル */
+function buildMeishiki(pillars){
+  const cols=[...pillars].reverse();
+  let th='<tr><th></th>',td1='<tr><td class="rl">天干</td>',td2='<tr><td class="rl">地支</td>',td3='<tr><td class="rl">蔵干</td>';
+  cols.forEach(p=>{
+    th+=`<th>${p.label}</th>`;
+    td1+=`<td><span class="kt">${TK[p.ki]}</span><span class="subt">${KY[p.ki]}（${KG[p.ki]}・${KI[p.ki]}）</span></td>`;
+    td2+=`<td><span class="st">${CS[p.si]}</span><span class="subt">${SY[p.si]}（${SG[p.si]}）</span></td>`;
+    td3+=`<td><span class="subt" style="font-size:12px;color:var(--text2);">${(ZOKAN[CS[p.si]]||[]).join('・')||'─'}</span></td>`;
+  });
+  document.getElementById('mtbl').innerHTML=th+'</tr>'+td1+'</tr>'+td2+'</tr>'+td3+'</tr>';
+}
+
+/* 通変星テーブル */
+function buildTsuhen(tsList){
+  const cols=[...tsList].reverse();
+  let th='<tr><th></th>',td1='<tr><td class="rl">通変星</td>',td2='<tr><td class="rl">十二運</td>';
+  cols.forEach(t=>{
+    th+=`<th>${t.label}</th>`;
+    td1+=`<td><span class="tst">${t.ts}</span></td>`;
+    td2+=`<td><span class="jst">${t.ju}</span></td>`;
+  });
+  document.getElementById('ttbl').innerHTML=th+'</tr>'+td1+'</tr>'+td2+'</tr>';
+}
+
+/* 五行バー */
+function buildGogyo(gogyo,nki){
+  const total=Object.values(gogyo).reduce((a,b)=>a+b,0)||1;
+  const order=[['木','ki'],['火','ka'],['土','do'],['金','gon'],['水','sui']];
+  let maxG='木',maxV=0,html='';
+  order.forEach(([g,cls])=>{
+    const v=gogyo[g]||0;
+    if(v>maxV){maxV=v;maxG=g;}
+    const h=Math.round((v/total)*90);
+    const pct=Math.round((v/total)*100);
+    html+=`<div class="gc"><div class="gname">${g}</div><div class="gbg"><div class="gfill ${cls}" style="height:${Math.max(h,4)}px;"></div></div><div class="gpct">${pct}%</div></div>`;
+  });
+  document.getElementById('gbars').innerHTML=html;
+  const GC_COM={木:'木の気が強く、成長・向上・挑戦の気質が命式に豊かです。',火:'火の気が強く、情熱・表現力・社交性が際立ちます。',土:'土の気が強く、安定・誠実・継続する力があります。',金:'金の気が強く、決断・正義・実行力が際立ちます。',水:'水の気が強く、知性・柔軟・適応力が豊かです。'};
+  document.getElementById('gcom').textContent=GC_COM[maxG]||'';
+  const myScore=((gogyo[KG[nki]]||0)/total)*100;
+  const spct=Math.min(Math.max(Math.round(myScore*2.5),10),90);
+  document.getElementById('sfill').style.width=spct+'%';
+  document.getElementById('sval').textContent=spct+'%';
+  const sl=spct>=60?'身強（身旺）':spct>=40?'中和':'身弱';
+  document.getElementById('scom').textContent=`日主（${TK[nki]}）の五行「${KG[nki]}」が命式全体に占める割合は${Math.round(myScore)}%で、${sl}の命式です。${spct>=60?'自力で道を切り拓く力が強く、官星・財星の大運で活躍しやすい。':spct>=40?'バランスが取れており、柔軟な対応ができる命式。':'印綬・比劫の大運が吉となりやすく、身を守る力を育てることが大切。'}`;
+}
+
+/* 大運 */
+function buildDaiu(daiu,currentAge){
+  document.getElementById('dlist').innerHTML=daiu.map(d=>{
+    const cur=currentAge>=d.age&&currentAge<d.age+10;
+    return`<div class="dc ${cur?'cur':''}"><div class="dage">${d.age}〜${d.age+9}歳</div><div class="dkan">${TK[d.ki]}</div><div class="dshi">${CS[d.si]}</div>${cur?'<div class="dnow">★現在</div>':''}</div>`;
+  }).join('');
+}
+
+/* ═══ 本質と才能（2枚カード） ═══ */
+function buildEssence(nkan,nki,gogyo){
+  const selfD=SELF_TEXT[nkan]||{title:'本来の姿',body:'',kw:[]};
+  const talentD=TALENT_TEXT[nkan]||{title:'才能',body:'',kw:[]};
+
+  document.getElementById('essence-grid').innerHTML=`
+    <div class="essence-card">
+      <div class="ecard-icon icon-self">🌙</div>
+      <div class="ecard-label">本 来 の 姿</div>
+      <div class="ecard-title">${selfD.title}</div>
+      <div class="ecard-divider"></div>
+      <div class="ecard-body">${selfD.body}</div>
+      <div class="kw-list">${selfD.kw.map(k=>`<span class="kw-tag">${k}</span>`).join('')}</div>
+    </div>
+    <div class="essence-card">
+      <div class="ecard-icon icon-talent">✨</div>
+      <div class="ecard-label">才　　能</div>
+      <div class="ecard-title">${talentD.title}</div>
+      <div class="ecard-divider"></div>
+      <div class="ecard-body">${talentD.body}</div>
+      <div class="kw-list">${talentD.kw.map(k=>`<span class="kw-tag">${k}</span>`).join('')}</div>
+    </div>
+  `;
+}
+</script>
 </body>
 </html>
