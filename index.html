@@ -393,42 +393,62 @@ main{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:36px 16px
 .tst{font-family:'Noto Serif JP',serif;font-size:15px;font-weight:600;color:var(--gold2);}
 .jst{font-size:12px;color:var(--teal);margin-top:3px;}
 
-/* 五行 */
-.gbars{display:flex;gap:8px;margin-bottom:14px;}
-.gc{flex:1;text-align:center;}
-.gname{font-size:12px;color:var(--text2);margin-bottom:7px;font-family:'Noto Serif JP',serif;}
-.gbg{height:90px;background:rgba(255,255,255,.04);border-radius:4px;display:flex;align-items:flex-end;overflow:hidden;}
-.gfill{width:100%;border-radius:4px 4px 0 0;transition:height .95s cubic-bezier(.22,1,.36,1);}
-.gpct{font-size:11px;font-weight:500;color:var(--text2);margin-top:4px;}
-.gfill.ki{background:linear-gradient(180deg,#4ade80,#166534);}
-.gfill.ka{background:linear-gradient(180deg,#f87171,#991b1b);}
-.gfill.do{background:linear-gradient(180deg,#fbbf24,#92400e);}
-.gfill.gon{background:linear-gradient(180deg,#94a3b8,#334155);}
-.gfill.sui{background:linear-gradient(180deg,#60a5fa,#1e3a8a);}
-
-.swrap{display:flex;align-items:center;gap:10px;margin:12px 0;}
-.sbg{flex:1;height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;}
-.sfill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--teal),var(--gold));transition:width 1.2s cubic-bezier(.22,1,.36,1);}
-.send{font-size:11px;color:var(--text3);}
-.sval{font-size:13px;font-weight:700;color:var(--gold2);min-width:46px;text-align:right;}
-
-/* 大運 */
-.dlist{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;}
-.dc{
-  min-width:78px;flex-shrink:0;
-  border:1px solid rgba(212,168,68,.18);border-radius:8px;
-  padding:10px 5px;text-align:center;
-  background:rgba(10,14,44,.7);transition:all .2s;
+/* ═══ 杏月先生バナー（ヘッダー直下・常時表示） ═══ */
+.anzu-bar{
+  position:relative;z-index:3;
+  background:linear-gradient(90deg,rgba(8,6,30,.97),rgba(60,10,60,.97),rgba(8,6,30,.97));
+  border-top:1px solid rgba(212,168,68,.2);
+  border-bottom:1px solid rgba(212,168,68,.25);
+  padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  overflow:hidden;
 }
-.dc.cur{
-  border-color:var(--gold);
-  background:linear-gradient(165deg,rgba(80,50,8,.35),rgba(50,20,0,.45));
-  box-shadow:0 0 16px rgba(212,168,68,.2);
+.anzu-bar::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 120% at 50% 50%,rgba(160,60,180,.1),transparent 70%);}
+.anzu-bar-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+.anzu-avatar{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#c84080,#8020c0);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 0 10px rgba(200,80,160,.4);}
+.anzu-text{min-width:0;}
+.anzu-label{font-size:9px;letter-spacing:.2em;color:var(--gold);margin-bottom:2px;}
+.anzu-name{font-family:'Noto Serif JP',serif;font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;}
+.anzu-desc{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.anzu-btn{
+  flex-shrink:0;padding:8px 14px;
+  background:linear-gradient(135deg,#c02050,#800090);
+  border:1px solid rgba(212,168,68,.35);border-radius:20px;
+  color:#fff;font-size:11px;font-family:'Noto Serif JP',serif;
+  font-weight:600;letter-spacing:.12em;white-space:nowrap;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  box-shadow:0 2px 12px rgba(160,20,100,.45);
+  transition:all .2s;position:relative;z-index:1;
 }
-.dage{font-size:10px;color:var(--text3);margin-bottom:5px;}
-.dkan{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:700;color:#ff9aaa;}
-.dshi{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:700;color:var(--teal2);}
-.dnow{font-size:10px;color:var(--gold);margin-top:4px;}
+.anzu-btn:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(160,20,100,.6);}
+
+/* ═══ 結果下：杏月先生CTA ═══ */
+.anzu-cta{
+  margin-top:28px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(80,10,60,.65),rgba(20,8,50,.85),rgba(60,10,80,.65));
+  border:1px solid rgba(212,168,68,.32);border-radius:14px;
+  padding:26px 20px;text-align:center;
+  box-shadow:0 4px 28px rgba(100,10,80,.3);
+}
+.anzu-cta::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(180,50,160,.12),transparent 65%);}
+.anzu-cta-label{font-size:10px;letter-spacing:.3em;color:var(--gold);margin-bottom:8px;position:relative;z-index:1;}
+.anzu-cta-title{font-family:'Noto Serif JP',serif;font-size:clamp(15px,3.5vw,20px);font-weight:700;color:var(--text);letter-spacing:.1em;line-height:1.6;margin-bottom:8px;position:relative;z-index:1;}
+.anzu-cta-title em{font-style:normal;background:linear-gradient(90deg,var(--gold2),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.anzu-cta-sub{font-size:12px;color:var(--text2);line-height:1.9;margin-bottom:18px;position:relative;z-index:1;}
+.anzu-stars{color:var(--gold2);font-size:12px;letter-spacing:.15em;margin-bottom:12px;position:relative;z-index:1;}
+.anzu-cta-btn{
+  display:inline-block;padding:13px 32px;
+  background:linear-gradient(135deg,#c02050,#800090);
+  border:1px solid rgba(212,168,68,.4);border-radius:30px;
+  color:#fff;font-family:'Noto Serif JP',serif;
+  font-size:15px;font-weight:700;letter-spacing:.2em;
+  text-decoration:none;cursor:pointer;
+  box-shadow:0 4px 20px rgba(160,20,100,.5);
+  transition:all .25s;position:relative;z-index:1;overflow:hidden;
+}
+.anzu-cta-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);transform:translateX(-100%);transition:transform .5s;}
+.anzu-cta-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(160,20,100,.65);}
+.anzu-cta-btn:hover::after{transform:translateX(100%);}
 
 /* ═══ 性格タブ：2枚カードのみ ═══ */
 .essence-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
@@ -584,6 +604,21 @@ footer{
   </div>
 </header>
 
+<!-- 杏月先生バナー（常時表示） -->
+<div class="anzu-bar">
+  <div class="anzu-bar-left">
+    <div class="anzu-avatar">🔮</div>
+    <div class="anzu-text">
+      <div class="anzu-label">監修・総括</div>
+      <div class="anzu-name">杏月先生</div>
+      <div class="anzu-desc">この命式診断を総括・監修しています</div>
+    </div>
+  </div>
+  <a class="anzu-btn" href="https://app-clear.com/open?act=otherprofile-67524e81b9fef21451ecf142">
+    詳しく鑑定 ›
+  </a>
+</div>
+
 <main>
   <!-- フォームカード -->
   <div class="form-card">
@@ -611,17 +646,21 @@ footer{
       <div class="date-row">
         <div class="date-blk">
           <label>西暦（年）</label>
-          <input type="number" id="iy" class="date-num" placeholder="1990" min="1900" max="2030" inputmode="numeric"/>
+          <input type="number" id="iy" class="date-num" placeholder="1990" min="1925" inputmode="numeric"
+            oninput="clearErr(this);if(this.value.length===4){document.getElementById('im').focus();document.getElementById('im').select();}"
+            onload="this.max=new Date().getFullYear();"/>
         </div>
         <span class="dunit">年</span>
         <div class="date-blk" style="max-width:76px;">
           <label>月</label>
-          <input type="number" id="im" class="date-num" placeholder="7" min="1" max="12" inputmode="numeric"/>
+          <input type="number" id="im" class="date-num" placeholder="7" min="1" max="12" inputmode="numeric"
+            oninput="clearErr(this);const v=parseInt(this.value);if(this.value.length===2||(v>=2&&v<=9)){document.getElementById('id').focus();document.getElementById('id').select();}"/>
         </div>
         <span class="dunit">月</span>
         <div class="date-blk" style="max-width:76px;">
           <label>日</label>
-          <input type="number" id="id" class="date-num" placeholder="15" min="1" max="31" inputmode="numeric"/>
+          <input type="number" id="id" class="date-num" placeholder="15" min="1" max="31" inputmode="numeric"
+            oninput="clearErr(this);"/>
         </div>
         <span class="dunit">日</span>
       </div>
@@ -655,8 +694,6 @@ footer{
 
     <div class="tabs">
       <button class="tbtn on" onclick="showTab('t1')">命式・通変星</button>
-      <button class="tbtn" onclick="showTab('t2')">五行バランス</button>
-      <button class="tbtn" onclick="showTab('t3')">大運</button>
       <button class="tbtn" onclick="showTab('t4')">本質と才能</button>
     </div>
 
@@ -667,34 +704,28 @@ footer{
       <div class="mwrap"><table class="mtbl" id="ttbl"></table></div>
     </div>
 
-    <div class="tpanel" id="t2">
-      <p class="sttl">五行バランス</p>
-      <div class="gbars" id="gbars"></div>
-      <p id="gcom" style="font-size:13px;color:var(--text2);line-height:1.95;margin-bottom:22px;"></p>
-      <p class="sttl">日主の身強・身弱</p>
-      <div class="swrap">
-        <span class="send">弱</span>
-        <div class="sbg"><div class="sfill" id="sfill" style="width:50%"></div></div>
-        <span class="send">強</span>
-        <span class="sval" id="sval">50%</span>
-      </div>
-      <p id="scom" style="font-size:13px;color:var(--text2);line-height:1.95;"></p>
-    </div>
-
-    <div class="tpanel" id="t3">
-      <p class="sttl">大運（10年ごとの運気の流れ）</p>
-      <div class="dlist" id="dlist"></div>
-      <p style="font-size:11px;color:var(--text3);margin-top:12px;line-height:1.9;">★ は現在の大運です。大運は10年周期で変わる運気の大きな流れを示します。</p>
-    </div>
-
     <div class="tpanel" id="t4">
-      <!-- 2枚カードのみ -->
       <div class="essence-grid" id="essence-grid"></div>
     </div>
 
+    <!-- 杏月先生へ誘導CTA -->
+    <div class="anzu-cta">
+      <div class="anzu-cta-label">杏月先生　総括鑑定</div>
+      <div class="anzu-stars">✦ ✦ ✦ ✦ ✦</div>
+      <div class="anzu-cta-title">
+        あなたの命式をもとに<br><em>未来・恋愛・仕事</em>を深く読み解く
+      </div>
+      <div class="anzu-cta-sub">
+        この診断結果をもって、杏月先生がさらに詳しく鑑定します。<br>
+        あなたの運命の流れ・転換期・縁を丁寧に紐解きます。
+      </div>
+      <a class="anzu-cta-btn" href="https://app-clear.com/open?act=otherprofile-67524e81b9fef21451ecf142">
+        🔮 杏月先生に鑑定してもらう
+      </a>
+    </div>
+
     <div class="notice">
-      ※ 本結果は参考情報です。専門家による鑑定の代替ではありません。<br>
-      ※ 出生時刻が不明な場合、時柱は省略されます。
+      ※ この診断はあくまで目安です。より詳しい鑑定は杏月先生にご相談ください。
     </div>
   </div>
 </main>
@@ -746,6 +777,14 @@ const JIKOKU=[
 })();
 
 let selH=-1,selGender='male';
+
+// エラーリセット：入力するたびに呼ばれる
+function clearErr(el){
+  el.style.borderColor='';
+  const ferr=document.getElementById('ferr');
+  ferr.style.display='none';
+  ferr.textContent='';
+}
 function selHour(h,btn){
   selH=h;
   document.querySelectorAll('.hbtn').forEach(b=>b.classList.remove('on'));
@@ -901,9 +940,40 @@ function calc(){
   const name=document.getElementById('inp-name').value.trim()||'あなた';
   const ferr=document.getElementById('ferr');
 
-  if(isNaN(y)||isNaN(m)||isNaN(d)||y<1900||m<1||m>12||d<1||d>31){
-    ferr.style.display='block';ferr.textContent='⚠ 生年月日を正しく入力してください';return;
+  // エラー枠リセット
+  ['iy','im','id'].forEach(id=>document.getElementById(id).style.borderColor='');
+
+  // 今日の日付
+  const today=new Date();
+  const tyear=today.getFullYear(),tmonth=today.getMonth()+1,tday=today.getDate();
+
+  // ① 年チェック
+  if(isNaN(y)||y<1925||y>tyear){
+    document.getElementById('iy').style.borderColor='#ff4466';
+    ferr.style.display='block';
+    ferr.textContent=`⚠ ${1925}〜${tyear}年の間で入力してください`;
+    return;
   }
+  // ② 月チェック
+  if(isNaN(m)||m<1||m>12){
+    document.getElementById('im').style.borderColor='#ff4466';
+    ferr.style.display='block';ferr.textContent='⚠ 月は1〜12で入力してください';return;
+  }
+  // ③ 日チェック（その月の実際の日数）
+  const maxDay=new Date(y,m,0).getDate(); // その月の末日
+  if(isNaN(d)||d<1||d>maxDay){
+    document.getElementById('id').style.borderColor='#ff4466';
+    ferr.style.display='block';
+    ferr.textContent=`⚠ ${y}年${m}月は${maxDay}日までです`;return;
+  }
+  // ④ 未来日チェック
+  if(y>tyear||(y===tyear&&m>tmonth)||(y===tyear&&m===tmonth&&d>tday)){
+    document.getElementById('iy').style.borderColor='#ff4466';
+    document.getElementById('im').style.borderColor='#ff4466';
+    document.getElementById('id').style.borderColor='#ff4466';
+    ferr.style.display='block';ferr.textContent='⚠ 未来の日付は入力できません';return;
+  }
+
   ferr.style.display='none';
 
   const yk=yearKS(y,m,d);
@@ -940,9 +1010,7 @@ function calc(){
 
   buildMeishiki(pillars);
   buildTsuhen(tsList);
-  buildGogyo(gogyo,nki);
-  buildDaiu(daiu,age);
-  buildEssence(nkan,nki,gogyo);
+  buildEssence(nkan,nki);
 
   document.getElementById('result').style.display='block';
   document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1006,7 +1074,7 @@ function buildDaiu(daiu,currentAge){
 }
 
 /* ═══ 本質と才能（2枚カード） ═══ */
-function buildEssence(nkan,nki,gogyo){
+function buildEssence(nkan,nki){
   const selfD=SELF_TEXT[nkan]||{title:'本来の姿',body:'',kw:[]};
   const talentD=TALENT_TEXT[nkan]||{title:'才能',body:'',kw:[]};
 
